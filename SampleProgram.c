@@ -64,6 +64,12 @@ void SolidFilledEllipse(DATA ellipse);
 
 void Ellipse(DATA ellipse);
 
+void PixelOfRhombus(DATA pixel, int i, int j);
+
+void PixelOfCircle(DATA pixel, int i, int j);
+
+void PixelOfSquare(DATA pixel, int i, int j);
+
 int	main(void)
 {
 	BITMAPFILEHEADER    file_header;
@@ -184,16 +190,12 @@ int	main(void)
             scanf("%d%d", &cir.x0, &cir.y0);
             printf("半径を入力: ");
             scanf("%lf", &cir.rd);
-            if(cir.x0 - cir.rd < -1024 || cir.x0 + cir.rd > 1024){
-                printf(">>> この中心と半径では円が描画範囲に描けません <<<\n");
-            } else if(cir.y0 - cir.rd < -1024 || cir.y0 + cir.rd > 1024){
+            if(cir.rd > (width / 2) + cir.x0 || cir.rd > (width / 2) - cir.x0 || cir.rd > (height / 2) + cir.y0 || cir.rd > (height / 2) - cir.y0){
                 printf(">>> この中心と半径では円が描画範囲に描けません <<<\n");
             } else {
                 printf("太さ情報を入力: ");
                 scanf("%d", &cir.thk);
-                if(cir.x0 - cir.rd - cir.thk < -1024 || cir.x0 + cir.rd + cir.thk > 1024){
-                    printf(">>> この中心と半径と太さでは円が描画範囲に描けません <<<\n");
-                } else if(cir.y0 - cir.rd - cir.thk < -1024 || cir.y0 + cir.rd + cir.thk > 1024){
+                if(cir.rd + cir.thk > (width / 2) + cir.x0 || cir.rd + cir.thk > (width / 2) - cir.x0 || cir.rd + cir.thk > (height / 2) + cir.y0 || cir.rd + cir.thk > (height / 2) - cir.y0){
                     printf(">>> この中心と半径と太さでは円が描画範囲に描けません <<<\n");
                 } else {
                     printf("cx: %d, cy: %d, rd: %.f, thk: %d\n", cir.x0, cir.y0, cir.rd, cir.thk);
@@ -278,16 +280,12 @@ int	main(void)
             scanf("%lf", &ellipse.wAxis);
             printf("縦径を入力: ");
             scanf("%lf", &ellipse.hAxis);
-            if(ellipse.x0 - ellipse.wAxis < -1024 || ellipse.x0 + ellipse.wAxis > 1024){
-                printf(">>> この中心と横径と縦径では円が描画範囲に描けません <<<\n");
-            } else if(ellipse.y0 - ellipse.hAxis < -1024 || ellipse.y0 + ellipse.hAxis > 1024) {
+            if(ellipse.wAxis > (width / 2) + ellipse.x0 || ellipse.wAxis > (width / 2) - ellipse.x0 || ellipse.hAxis > (height / 2) + ellipse.y0 || ellipse.hAxis > (height / 2) - ellipse.y0){
                 printf(">>> この中心と横径と縦径では円が描画範囲に描けません <<<\n");
             } else {
                 printf("太さ情報を入力: ");
                 scanf("%d", &ellipse.thk);
-                if(ellipse.x0 - ellipse.wAxis - ellipse.thk < -1024 || ellipse.x0 + ellipse.wAxis + ellipse.thk > 1024){
-                    printf(">>> この中心と横径と縦径と太さでは円が描画範囲に描けません <<<\n");
-                } else if(ellipse.y0 - ellipse.hAxis - ellipse.thk < -1024 || ellipse.y0 + ellipse.hAxis + ellipse.thk > 1024) {
+                if(ellipse.wAxis + ellipse.thk > (width / 2) + ellipse.x0 || ellipse.wAxis + ellipse.thk > (width / 2) - ellipse.x0 || ellipse.hAxis + ellipse.thk > (height / 2) + ellipse.y0 || ellipse.hAxis + ellipse.thk > (height / 2) - ellipse.y0){
                     printf(">>> この中心と横径と縦径と太さでは円が描画範囲に描けません <<<\n");
                 } else {
                     printf("色情報 r g b を入力: ");
@@ -301,7 +299,7 @@ int	main(void)
         else if(zukei == 99){   //終了
             break;
         }
-        else if(zukei < 1 || (zukei > 9 && zukei < 99) || zukei > 99){  //例外
+        else if(zukei < 1 || (zukei > 9 && zukei < 99) || zukei > 99){
             printf(">>> 該当するものがありません <<<\n");
         }
     }
@@ -352,9 +350,9 @@ int	main(void)
 			fwrite(&b_img[i][j], 1, 1, fp); // B
 			fwrite(&g_img[i][j], 1, 1, fp); // G
 			fwrite(&r_img[i][j], 1, 1, fp); // R
-			}
 		}
-
+	}
+    
 	//* 以上データをファイルに書き込む処理 *//
 
 	//* 完了の表示
@@ -482,44 +480,37 @@ void Circle(DATA cir){  //円
 }
 
 void LineSegment(DATA line){    //線分
+    DATA pixel;
     double dx, dy;
     int i, j;
+    pixel.thk = line.thk;
+    pixel.r = line.r;
+    pixel.g = line.r;
+    pixel.b = line.r;
     dx = line.x1 - line.x0;
     dy = line.y1 - line.y0;
     if(dy / dx >= -1 && dy / dx <= 1){
         if(line.x0 < line.x1){
-            for(i = line.x0 - line.thk; i <= line.x1 + line.thk; i++){
-                for(j = (dy / dx) * (i - line.x0) + line.y0 - line.thk; j <= (dy / dx) * (i - line.x0) + line.y0 + line.thk; j++){
-                    r_img[i][j] = line.r; // R
-                    g_img[i][j] = line.g; // G
-                    b_img[i][j] = line.b; // B
-                }
+            for(i = line.x0; i <= line.x1; i++){
+                j = (dy / dx) * (i - line.x0) + line.y0;
+                PixelOfRhombus(pixel, i, j);
             }
         } else {
-            for(i = line.x1 - line.thk; i <= line.x0 + line.thk; i++){
-                for(j = (dy / dx) * (i - line.x0) + line.y0 - line.thk; j <= (dy / dx) * (i - line.x0) + line.y0 + line.thk; j++){
-                    r_img[i][j] = line.r; // R
-                    g_img[i][j] = line.g; // G
-                    b_img[i][j] = line.b; // B
-                }
+            for(i = line.x1; i <= line.x0; i++){
+                j = (dy / dx) * (i - line.x0) + line.y0;
+                PixelOfRhombus(pixel, i, j);
             }
         }
     } else {
         if(line.y0 < line.y1){
-            for(j = line.y0 - line.thk; j <= line.y1 + line.thk; j++){
-                for(i = (dx / dy) * (j - line.y1) + line.x1 - line.thk; i <= (dx / dy) * (j - line.y1) + line.x1 + line.thk; i++){
-                    r_img[i][j] = line.r; // R
-                    g_img[i][j] = line.g; // G
-                    b_img[i][j] = line.b; // B
-                }
+            for(j = line.y0; j <= line.y1; j++){
+                i = (dx / dy) * (j - line.y1) + line.x1;
+                PixelOfRhombus(pixel, i, j);
             }
         } else {
-            for(j = line.y1 - line.thk; j <= line.y0 + line.thk; j++){
-                for(i = (dx / dy) * (j - line.y1) + line.x1 - line.thk; i <= (dx / dy) * (j - line.y1) + line.x1 + line.thk; i++){
-                    r_img[i][j] = line.r; // R
-                    g_img[i][j] = line.g; // G
-                    b_img[i][j] = line.b; // B
-                }
+            for(j = line.y1; j <= line.y0; j++){
+                i = (dx / dy) * (j - line.y1) + line.x1;
+                PixelOfRhombus(pixel, i, j);
             }
         }
     }
@@ -638,4 +629,45 @@ void Ellipse(DATA ellipse){ //楕円
             b_img[i][j] = ellipse.b; // B
         }
     }
+}
+
+void PixelOfRhombus(DATA pixel, int i, int j){   //画素を大きくする(菱形)
+    int m, n;
+    for(n = j; n <= j + pixel.thk; n++){
+        for(m = i - pixel.thk + (n - j); m <= i + pixel.thk - (n - j); m++){
+            r_img[m][n] = pixel.r; // R
+            g_img[m][n] = pixel.g; // G
+            b_img[m][n] = pixel.b; // B
+        }
+    }
+    for(n = j - pixel.thk; n <= j; n++){
+        for(m = i - pixel.thk - (n - j); m <= i + pixel.thk + (n - j); m++){
+            r_img[m][n] = pixel.r; // R
+            g_img[m][n] = pixel.g; // G
+            b_img[m][n] = pixel.b; // B
+        }
+    }
+}
+
+void PixelOfCircle(DATA pixel, int i, int j){   //画素を大きくする(円形)
+    DATA cir;
+    cir.rd = pixel.thk;
+    cir.r = pixel.r;
+    cir.g = pixel.g;
+    cir.b = pixel.b;
+    cir.x0 = i;
+    cir.y0 = j;
+    SolidFilledCircle(cir);
+}
+
+void PixelOfSquare(DATA pixel, int i, int j){   //画素を大きくする(四角形)
+    DATA rectangle;
+    rectangle.r = pixel.r;
+    rectangle.g = pixel.g;
+    rectangle.b = pixel.b;
+    rectangle.x0 = i - pixel.thk;
+    rectangle.y0 = j - pixel.thk;
+    rectangle.x1 = i + pixel.thk;
+    rectangle.y1 = j + pixel.thk;
+    SolidFilledRectangle(rectangle);
 }
