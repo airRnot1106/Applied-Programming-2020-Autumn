@@ -70,7 +70,6 @@ int	main(void)
 	BITMAPINFOHEADER    info_header;
 	char		    file_name[80];
 	int		    i, j, width, height;
-    int errorCheck = 0;
     int zukei;
 
     DATA rectangle;
@@ -497,7 +496,7 @@ void LineSegment(DATA line){    //線分
                 }
             }
         } else {
-            for(i = line.x1; i <= line.x0; i++){
+            for(i = line.x1 - line.thk; i <= line.x0 + line.thk; i++){
                 for(j = (dy / dx) * (i - line.x0) + line.y0 - line.thk; j <= (dy / dx) * (i - line.x0) + line.y0 + line.thk; j++){
                     r_img[i][j] = line.r; // R
                     g_img[i][j] = line.g; // G
@@ -515,7 +514,7 @@ void LineSegment(DATA line){    //線分
                 }
             }
         } else {
-            for(j = line.y1; j <= line.y0; j++){
+            for(j = line.y1 - line.thk; j <= line.y0 + line.thk; j++){
                 for(i = (dx / dy) * (j - line.y1) + line.x1 - line.thk; i <= (dx / dy) * (j - line.y1) + line.x1 + line.thk; i++){
                     r_img[i][j] = line.r; // R
                     g_img[i][j] = line.g; // G
