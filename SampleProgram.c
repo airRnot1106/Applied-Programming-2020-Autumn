@@ -1,3 +1,6 @@
+// 学生証番号:
+// 氏　　　名:
+
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -46,29 +49,30 @@ typedef struct tagDATA {
     int thk;
 } DATA;
 
+//*** 1.塗りつぶし長方形の関数
 void SolidFilledRectangle(DATA rectangle);
-
+//*** 2.長方形の関数
 void Rectangle(DATA rectangle);
-
+//*** 3.塗りつぶし円の関数
 void SolidFilledCircle(DATA cir);
-
+//*** 4.円の関数
 void Circle(DATA cir);
-
-void LineSegment(DATA line);
-
+//*** 5-1.線分の関数 - 線幅2t+1
+void LineSegment1(DATA line);
+//*** 5-2.線分の関数 - 線幅2t+1画素◆
+void LineSegment2(DATA line);
+//*** 5-2-1.画素◆の関数
+void Pixel(DATA pixel, int i, int j);
+//*** 5-3.線分の関数 - 線幅2t+1画素●
+void LineSegment3(DATA line);
+//*** 6.三角形の関数
 void Triangle(DATA tri);
-
+//*** 7.正方形の関数
 void Square(DATA square);
-
+//*** 8.塗りつぶし楕円の関数
 void SolidFilledEllipse(DATA ellipse);
-
+//*** 9.楕円の関数
 void Ellipse(DATA ellipse);
-
-void PixelOfRhombus(DATA pixel, int i, int j);
-
-void PixelOfCircle(DATA pixel, int i, int j);
-
-void PixelOfSquare(DATA pixel, int i, int j);
 
 int	main(void)
 {
@@ -145,7 +149,8 @@ int	main(void)
     while(1){
         printf("図形を選択>\n1:塗りつぶし長方形\n2:長方形\n3:塗りつぶし円\n4:円\n5:線分\n6:三角形\n7:正方形\n8:塗りつぶし楕円\n9:楕円\n99:終了\n");
         scanf("%d", &zukei);
-        if(zukei == 1){     //塗りつぶし長方形
+        //*** 塗りつぶし長方形ここから
+        if(zukei == 1){
             printf("1点目のX座標とY座標を入力: ");
             scanf("%d%d", &rectangle.x0, &rectangle.y0);
             printf("2点目のX座標とY座標を入力: ");
@@ -157,8 +162,9 @@ int	main(void)
             rectangle.x1 += height / 2;
             rectangle.y1 += width / 2;
             SolidFilledRectangle(rectangle);
-        }
-        else if(zukei == 2){    //塗りつぶしなし長方形
+        }   //*** 塗りつぶし長方形ここまで
+        //*** 塗りつぶしなし長方形ここから
+        else if(zukei == 2){
             printf("1点目のX座標とY座標を入力: ");
             scanf("%d%d", &rectangle.x0, &rectangle.y0);
             printf("2点目のX座標とY座標を入力: ");
@@ -172,8 +178,9 @@ int	main(void)
             rectangle.x1 += height / 2;
             rectangle.y1 += width / 2;
             Rectangle(rectangle);
-        }
-        else if(zukei == 3){    //塗りつぶし円
+        }   //*** 塗りつぶしなし長方形ここまで
+        //*** 塗りつぶし円ここから
+        else if(zukei == 3){
             printf("中心のX座標とY座標を入力: ");
             scanf("%d%d", &cir.x0, &cir.y0);
             printf("半径を入力: ");
@@ -184,8 +191,9 @@ int	main(void)
             cir.x0 += width / 2;
             cir.y0 += height / 2;
             SolidFilledCircle(cir);
-        }
-        else if(zukei == 4){    //円
+        }   //*** 塗りつぶし円ここまで
+        //*** 円ここから
+        else if(zukei == 4){
             printf("中心のX座標とY座標を入力: ");
             scanf("%d%d", &cir.x0, &cir.y0);
             printf("半径を入力: ");
@@ -206,8 +214,9 @@ int	main(void)
                     Circle(cir);
                 }
             }
-        }
-        else if(zukei == 5){    //線分
+        }   //*** 円ここまで
+        //*** 線分ここから
+        else if(zukei == 5){
             printf("1点目のX座標とY座標を入力: ");
             scanf("%d%d", &line.x0, &line.y0);
             printf("2点目のX座標とY座標を入力: ");
@@ -220,9 +229,10 @@ int	main(void)
             line.y0 += height / 2;
             line.x1 += height / 2;
             line.y1 += width / 2;
-            LineSegment(line);
-        }
-        else if(zukei == 6){    //三角形
+            LineSegment1(line);
+        }   //*** 線分ここまで
+        //*** 三角形ここから
+        else if(zukei == 6){
             printf("1点目のX座標とY座標を入力: ");
             scanf("%d%d", &tri.x0, &tri.y0);
             printf("2点目のX座標とY座標を入力: ");
@@ -244,8 +254,9 @@ int	main(void)
                 tri.y2 += width / 2;
                 Triangle(tri);
             }
-        }
-        else if(zukei == 7){    //正方形
+        }   //*** 三角形ここまで
+        //*** 正方形ここから
+        else if(zukei == 7){
             printf("1点目のX座標を入力: ");
             scanf("%d%d", &square.x0, &square.y0);
             printf("2点目のY座標を入力: ");
@@ -259,8 +270,9 @@ int	main(void)
             square.x1 += width / 2;
             square.y1 += height / 2;
             Square(square);
-        }
-        else if(zukei == 8){    //塗りつぶし楕円
+        }   //*** 正方形ここまで
+        //*** 塗りつぶし楕円ここから
+        else if(zukei == 8){
             printf("中心のX座標とY座標を入力: ");
             scanf("%d%d", &ellipse.x0, &ellipse.y0);
             printf("横径を入力: ");
@@ -272,8 +284,9 @@ int	main(void)
             ellipse.x0 += width / 2;
             ellipse.y0 += height / 2;
             SolidFilledEllipse(ellipse);
-        }
-        else if(zukei == 9){    //楕円
+        }   //*** 塗りつぶし楕円ここまで
+        //*** 楕円ここから
+        else if(zukei == 9){
             printf("中心のX座標とY座標を入力: ");
             scanf("%d%d", &ellipse.x0, &ellipse.y0);
             printf("横径を入力: ");
@@ -295,13 +308,15 @@ int	main(void)
                     Ellipse(ellipse);
                 }
             }
-        }
-        else if(zukei == 99){   //終了
+        }   //*** 楕円ここまで
+        //*** 終了ここから
+        else if(zukei == 99){
             break;
-        }
+        }   //*** 終了ここまで
+        //*** 該当なしここから
         else if(zukei < 1 || (zukei > 9 && zukei < 99) || zukei > 99){
             printf(">>> 該当するものがありません <<<\n");
-        }
+        }   //*** 該当なしここまで
     }
 
 	//* 画像ファイル名の設定
@@ -365,8 +380,8 @@ int	main(void)
 
 	return 0;
 }
-
-void SolidFilledRectangle(DATA rectangle){ //塗りつぶし長方形
+//*** 塗りつぶし長方形ここから
+void SolidFilledRectangle(DATA rectangle){
     int i, j, tmp;
     if(rectangle.x0 > rectangle.x1){
         tmp = rectangle.x0;
@@ -385,9 +400,9 @@ void SolidFilledRectangle(DATA rectangle){ //塗りつぶし長方形
             b_img[i][j] = rectangle.b; // B
         }
     }
-}
-
-void Rectangle(DATA rectangle){ //塗りつぶしなし長方形
+}   //*** 塗りつぶし長方形ここまで
+//*** 長方形ここから
+void Rectangle(DATA rectangle){
     DATA line;
     line.thk = rectangle.thk;
     line.r = rectangle.r;
@@ -397,25 +412,25 @@ void Rectangle(DATA rectangle){ //塗りつぶしなし長方形
     line.y0 = rectangle.y0;
     line.x1 = rectangle.x1;
     line.y1 = rectangle.y0;
-    LineSegment(line);
+    LineSegment2(line);
     line.x0 = rectangle.x1;
     line.y0 = rectangle.y0;
     line.x1 = rectangle.x1;
     line.y1 = rectangle.y1;
-    LineSegment(line);
+    LineSegment2(line);
     line.x0 = rectangle.x1;
     line.y0 = rectangle.y1;
     line.x1 = rectangle.x0;
     line.y1 = rectangle.y1;
-    LineSegment(line);
+    LineSegment2(line);
     line.x0 = rectangle.x0;
     line.y0 = rectangle.y1;
     line.x1 = rectangle.x0;
     line.y1 = rectangle.y0;
-    LineSegment(line);
-}
-
-void SolidFilledCircle(DATA cir){   //塗りつぶし円
+    LineSegment2(line);
+}   //*** 長方形ここまで
+//*** 塗りつぶし円ここから
+void SolidFilledCircle(DATA cir){
     int i, j;
     for(i = cir.x0 - cir.rd; i <= cir.x0 + cir.rd; i++){
         for(j = cir.y0 - sqrt((cir.rd * cir.rd) - ((i - cir.x0) * (i - cir.x0))); j <= cir.y0 + sqrt((cir.rd * cir.rd) - ((i - cir.x0) * (i - cir.x0))); j++){
@@ -424,9 +439,9 @@ void SolidFilledCircle(DATA cir){   //塗りつぶし円
             b_img[i][j] = cir.b; // B
         }
     }
-}
-
-void Circle(DATA cir){  //円
+}   //*** 塗りつぶし円ここまで
+//*** 円ここから
+void Circle(DATA cir){
     int i, j;
     if(cir.thk > 0){
         for(i = cir.x0 - cir.rd - cir.thk; i <= cir.x0 - cir.rd + cir.thk; i++){
@@ -477,46 +492,142 @@ void Circle(DATA cir){  //円
             b_img[i][j] = cir.b; // B
         }
     }
-}
+}   //*** 円ここまで
+//*** 線分 - 線幅2t+1ここから
+void LineSegment1(DATA line){
+    double dx, dy;
+    int i, j;
+    dx = line.x1 - line.x0;
+    dy = line.y1 - line.y0;
+    if(dy / dx >= -1 && dy / dx <= 1){
+        if(line.x0 < line.x1){
+            for(i = line.x0 - line.thk; i <= line.x1 + line.thk; i++){
+                for(j = (dy / dx) * (i - line.x0) + line.y0 - line.thk; j <= (dy / dx) * (i - line.x0) + line.y0 + line.thk; j++){
+                    r_img[i][j] = line.r; // R
+                    g_img[i][j] = line.g; // G
+                    b_img[i][j] = line.b; // B
+                }
+            }
+        } else {
+            for(i = line.x1; i <= line.x0; i++){
+                for(j = (dy / dx) * (i - line.x0) + line.y0 - line.thk; j <= (dy / dx) * (i - line.x0) + line.y0 + line.thk; j++){
+                    r_img[i][j] = line.r; // R
+                    g_img[i][j] = line.g; // G
+                    b_img[i][j] = line.b; // B
+                }
+            }
+        }
+    } else {
+        if(line.y0 < line.y1){
+            for(j = line.y0 - line.thk; j <= line.y1 + line.thk; j++){
+                for(i = (dx / dy) * (j - line.y1) + line.x1 - line.thk; i <= (dx / dy) * (j - line.y1) + line.x1 + line.thk; i++){
+                    r_img[i][j] = line.r; // R
+                    g_img[i][j] = line.g; // G
+                    b_img[i][j] = line.b; // B
+                }
+            }
+        } else {
+            for(j = line.y1; j <= line.y0; j++){
+                for(i = (dx / dy) * (j - line.y1) + line.x1 - line.thk; i <= (dx / dy) * (j - line.y1) + line.x1 + line.thk; i++){
+                    r_img[i][j] = line.r; // R
+                    g_img[i][j] = line.g; // G
+                    b_img[i][j] = line.b; // B
+                }
+            }
+        }
+    }
+}   //*** 線分 - 線幅2t+1ここまで
 
-void LineSegment(DATA line){    //線分
+//*** 線分 - 線幅2t+1画素◆ここから
+void LineSegment2(DATA line){
     DATA pixel;
     double dx, dy;
     int i, j;
     pixel.thk = line.thk;
     pixel.r = line.r;
-    pixel.g = line.r;
-    pixel.b = line.r;
+    pixel.g = line.g;
+    pixel.b = line.b;
     dx = line.x1 - line.x0;
     dy = line.y1 - line.y0;
     if(dy / dx >= -1 && dy / dx <= 1){
         if(line.x0 < line.x1){
             for(i = line.x0; i <= line.x1; i++){
                 j = (dy / dx) * (i - line.x0) + line.y0;
-                PixelOfRhombus(pixel, i, j);
+                Pixel(pixel, i, j);
             }
         } else {
             for(i = line.x1; i <= line.x0; i++){
                 j = (dy / dx) * (i - line.x0) + line.y0;
-                PixelOfRhombus(pixel, i, j);
+                Pixel(pixel, i, j);
             }
         }
     } else {
         if(line.y0 < line.y1){
             for(j = line.y0; j <= line.y1; j++){
                 i = (dx / dy) * (j - line.y1) + line.x1;
-                PixelOfRhombus(pixel, i, j);
+                Pixel(pixel, i, j);
             }
         } else {
             for(j = line.y1; j <= line.y0; j++){
                 i = (dx / dy) * (j - line.y1) + line.x1;
-                PixelOfRhombus(pixel, i, j);
+                Pixel(pixel, i, j);
             }
         }
     }
-}
+}   //*** 線分 - 線幅2t+1画素◆ここまで
+//*** 線分 - 線幅2t+1画素●ここから
+void LineSegment3(DATA line){
+    DATA pixel;
+    DATA cir;
+    double dx, dy;
+    int i, j;
+    pixel.thk = line.thk;
+    pixel.r = line.r;
+    pixel.g = line.g;
+    pixel.b = line.b;
+    cir.rd = pixel.thk;
+    cir.r = pixel.r;
+    cir.g = pixel.g;
+    cir.b = pixel.b;
+    dx = line.x1 - line.x0;
+    dy = line.y1 - line.y0;
+    if(dy / dx >= -1 && dy / dx <= 1){
+        if(line.x0 < line.x1){
+            for(i = line.x0; i <= line.x1; i++){
+                j = (dy / dx) * (i - line.x0) + line.y0;
+                cir.x0 = i;
+                cir.y0 = j;
+                SolidFilledCircle(cir);
+            }
+        } else {
+            for(i = line.x1; i <= line.x0; i++){
+                j = (dy / dx) * (i - line.x0) + line.y0;
+                cir.x0 = i;
+                cir.y0 = j;
+                SolidFilledCircle(cir);
+            }
+        }
+    } else {
+        if(line.y0 < line.y1){
+            for(j = line.y0; j <= line.y1; j++){
+                i = (dx / dy) * (j - line.y1) + line.x1;
+                cir.x0 = i;
+                cir.y0 = j;
+                SolidFilledCircle(cir);
+            }
+        } else {
+            for(j = line.y1; j <= line.y0; j++){
+                i = (dx / dy) * (j - line.y1) + line.x1;
+                cir.x0 = i;
+                cir.y0 = j;
+                SolidFilledCircle(cir);
+            }
+        }
+    }
+}   //*** 線分 - 線幅2t+1画素●ここまで
 
-void Triangle(DATA tri){    //三角形
+//*** 三角形ここから
+void Triangle(DATA tri){
     DATA line;
     line.thk = tri.thk;
     line.r = tri.r;
@@ -526,20 +637,20 @@ void Triangle(DATA tri){    //三角形
     line.y0 = tri.y0;
     line.x1 = tri.x1;
     line.y1 = tri.y1;
-    LineSegment(line);
+    LineSegment3(line);
     line.x0 = tri.x1;
     line.y0 = tri.y1;
     line.x1 = tri.x2;
     line.y1 = tri.y2;
-    LineSegment(line);
+    LineSegment3(line);
     line.x0 = tri.x2;
     line.y0 = tri.y2;
     line.x1 = tri.x0;
     line.y1 = tri.y0;
-    LineSegment(line);
-}
-
-void Square(DATA square){   //正方形
+    LineSegment3(line);
+}   //*** 三角形ここまで
+//*** 正方形ここから
+void Square(DATA square){
     DATA line;
     line.thk = square.thk;
     line.r = square.r;
@@ -549,25 +660,25 @@ void Square(DATA square){   //正方形
     line.y0 = square.y0;
     line.x1 = (square.x0 + square.x1) / 2 + (square.y1 - square.y0) / 2;
     line.y1 = (square.y0 + square.y1) / 2 - (square.x1 - square.x0) / 2;
-    LineSegment(line);
+    LineSegment2(line);
     line.x0 = (square.x0 + square.x1) / 2 + (square.y1 - square.y0) / 2;
     line.y0 = (square.y0 + square.y1) / 2 - (square.x1 - square.x0) / 2;
     line.x1 = square.x1;
     line.y1 = square.y1;
-    LineSegment(line);
+    LineSegment2(line);
     line.x0 = square.x1;
     line.y0 = square.y1;
     line.x1 = (square.x0 + square.x1) / 2 - (square.y1 - square.y0) / 2;
     line.y1 = (square.y0 + square.y1) / 2 + (square.x1 - square.x0) / 2;
-    LineSegment(line);
+    LineSegment2(line);
     line.x0 = (square.x0 + square.x1) / 2 - (square.y1 - square.y0) / 2;
     line.y0 = (square.y0 + square.y1) / 2 + (square.x1 - square.x0) / 2;
     line.x1 = square.x0;
     line.y1 = square.y0;
-    LineSegment(line);
-}
-
-void SolidFilledEllipse(DATA ellipse){  //塗りつぶし楕円
+    LineSegment2(line);
+}   //*** 正方形ここまで
+//*** 塗りつぶし楕円ここから
+void SolidFilledEllipse(DATA ellipse){
     int i, j;
     for(i = ellipse.x0 - ellipse.wAxis; i <= ellipse.x0 + ellipse.wAxis; i++){
         for(j = ellipse.y0 - (ellipse.hAxis / ellipse.wAxis) * sqrt((ellipse.wAxis * ellipse.wAxis) - ((i - ellipse.x0) * (i - ellipse.x0))); j <= ellipse.y0 + (ellipse.hAxis / ellipse.wAxis) * sqrt((ellipse.wAxis * ellipse.wAxis) - ((i - ellipse.x0) * (i - ellipse.x0))); j++){
@@ -576,9 +687,9 @@ void SolidFilledEllipse(DATA ellipse){  //塗りつぶし楕円
             b_img[i][j] = ellipse.b; // B
         }
     }
-}
-
-void Ellipse(DATA ellipse){ //楕円
+}   //*** 塗りつぶし楕円ここまで
+//*** 楕円ここから
+void Ellipse(DATA ellipse){
     int i, j;
     if(ellipse.thk > 0){
         for(i = ellipse.x0 - ellipse.wAxis - ellipse.thk; i <= ellipse.x0 - ellipse.wAxis + ellipse.thk; i++){
@@ -629,9 +740,9 @@ void Ellipse(DATA ellipse){ //楕円
             b_img[i][j] = ellipse.b; // B
         }
     }
-}
-
-void PixelOfRhombus(DATA pixel, int i, int j){   //画素を大きくする(菱形)
+}   //*** 楕円ここまで
+//*** 画素◆ここから
+void Pixel(DATA pixel, int i, int j){
     int m, n;
     for(n = j; n <= j + pixel.thk; n++){
         for(m = i - pixel.thk + (n - j); m <= i + pixel.thk - (n - j); m++){
@@ -647,27 +758,4 @@ void PixelOfRhombus(DATA pixel, int i, int j){   //画素を大きくする(菱�
             b_img[m][n] = pixel.b; // B
         }
     }
-}
-
-void PixelOfCircle(DATA pixel, int i, int j){   //画素を大きくする(円形)
-    DATA cir;
-    cir.rd = pixel.thk;
-    cir.r = pixel.r;
-    cir.g = pixel.g;
-    cir.b = pixel.b;
-    cir.x0 = i;
-    cir.y0 = j;
-    SolidFilledCircle(cir);
-}
-
-void PixelOfSquare(DATA pixel, int i, int j){   //画素を大きくする(四角形)
-    DATA rectangle;
-    rectangle.r = pixel.r;
-    rectangle.g = pixel.g;
-    rectangle.b = pixel.b;
-    rectangle.x0 = i - pixel.thk;
-    rectangle.y0 = j - pixel.thk;
-    rectangle.x1 = i + pixel.thk;
-    rectangle.y1 = j + pixel.thk;
-    SolidFilledRectangle(rectangle);
-}
+}   //*** 画素◆ここまで
