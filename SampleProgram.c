@@ -49,6 +49,10 @@ typedef struct tagDATA {
     int thk;
 } DATA;
 
+//*** 0-1.ファイルの書き込みの関数
+int SaveData(char file_name[80], int width, int height, BITMAPFILEHEADER file_header, BITMAPINFOHEADER info_header);
+//*** 0-2.ファイルの読み込みの関数
+int ReadData(char file_name[80], int width, int height, BITMAPFILEHEADER file_header, BITMAPINFOHEADER info_header);
 //*** 1.塗りつぶし長方形の関数
 void SolidFilledRectangle(DATA rectangle);
 //*** 2.長方形の関数
@@ -81,6 +85,7 @@ int	main(void)
 	char		    file_name[80];
 	int		    i, j, width, height;
     int zukei;
+    int flg;
 
     DATA rectangle;
     DATA cir;
@@ -309,6 +314,39 @@ int	main(void)
                 }
             }
         }   //*** 楕円ここまで
+        //*** ファイル書き込み(画像データを格納)ここから
+        else if(zukei == 90){
+            //*** 画像ファイル名の設定
+	        //*** デスクトップに Zukei.bmp というファイルを作る
+            //*** ファイルパスは各自で指定してください
+            /*  保存場所のパス名を"strcpy(file_name, "XXX");"のXXXに記述する
+                Windowsの場合>  C:\\temp\\              など
+                MacOSの場合>    /Users/username/Desktop など
+            */
+	        for (i = 0; i < 80; i++)
+		        file_name[i] = 0;
+	        strcpy(file_name, "XXX/Zukei.bmp");
+	        printf("File Name: %s\n\n", file_name);
+            SaveData(file_name, width, height, file_header, info_header);
+        }   //*** ファイル書き込みここまで
+        //*** ファイルの読み込みここから
+        else if(zukei == 91){
+            char str[50];
+            //*** ファイル名を入力
+            //*** デスクトップに入力したファイル名で bmpファイルを読み込む
+            //*** ファイルパスは各自で指定してください
+            /*  保存場所のパス名を"strcpy(file_name, "XXX");"のXXXに記述する
+                Windowsの場合>  C:\\temp\\              など
+                MacOSの場合>    /Users/username/Desktop など
+            */
+            printf("ファイル名を入力(.bmp 自動付与): "); 
+            scanf("%s", str);
+            //*** ファイル名の設定
+            strcpy(file_name, "XXX");
+            strcat(file_name, str);
+            strcat(file_name, ".bmp");
+            ReadData(file_name, width, height, file_header, info_header);
+        }   //*** ファイルの読み込みここまで
         //*** 終了ここから
         else if(zukei == 99){
             break;
@@ -318,35 +356,64 @@ int	main(void)
             printf(">>> 該当するものがありません <<<\n");
         }   //*** 該当なしここまで
     }
-
-	//* 画像ファイル名の設定
-	//* Ｃドライブの temp というフォルダーに Zukei.bmp というファイルを作る
-    /*  保存場所のパス名を"strcpy(file_name, "XXX");"のXXXに記述する
-        Windowsの場合>  C:\\temp\\zukei.bmp     など
-        MacOSの場合>    /Users/username/Desktop など
-    */
-	for (i = 0; i < 80; i++)
-		file_name[i] = 0;
-	strcpy(file_name, "XXX");
-	printf("File Name: %s\n\n", file_name);
-
+    //*** いろいろな図形を描く処理はここまで ***// 
+    printf("保存しない:0, 保存:1, 名前を付けて保存:2> ");
+    scanf("%d", &flg);
+    if(flg == 1){
+        //*** 画像ファイル名の設定
+        //*** デスクトップに Zukei.bmp というファイルを作る
+        //* 画像ファイル名の設定
+        /*  保存場所のパス名を"strcpy(file_name, "XXX");"のXXXに記述する
+            Windowsの場合>  C:\\temp\\zukei.bmp               など
+            MacOSの場合>    /Users/username/Desktop/Zukei.bmp など
+        */
+        for (i = 0; i < 80; i++)
+            file_name[i] = 0;
+        strcpy(file_name, "XXX/Zukei.bmp");
+        printf("File Name: %s\n\n", file_name);
+        SaveData(file_name, width, height, file_header, info_header);
+    } else if(flg == 2){
+        char str[50];
+        //*** ファイル名を入力
+        //*** デスクトップに入力したファイル名で bmpファイルを作る
+        printf("ファイル名を入力(.bmp 自動付与): "); 
+        scanf("%s", str);
+        //*** ファイル名の設定
+        //* 画像ファイル名の設定
+        /*  保存場所のパス名を"strcpy(file_name, "XXX");"のXXXに記述する
+            Windowsの場合>  C:\\temp\\              など
+            MacOSの場合>    /Users/username/Desktop など
+        */
+        strcpy(file_name, "XXX");
+        strcat(file_name, str);
+        strcat(file_name, ".bmp");
+        SaveData(file_name, width, height, file_header, info_header);
+    }
+	return 0;
+}
+//*** ファイルの書き込みここから
+int SaveData(char file_name[80], int width, int height, BITMAPFILEHEADER file_header, BITMAPINFOHEADER info_header){
+    int i, j;
+    //*** ファイルを開く
 	fp = fopen(file_name, "wb");
 	if (fp != 0)
 		printf("%s OPEN!\n", file_name);
 	else {
 		printf("%s OPEN FAILED! ", file_name);
 		perror("error");
-		return -1;
+        return -1;
 	}
 
-	//* 以下データをファイルに書き込む処理 *//
+	//*** ▼▼▼ データをファイルに書き込む処理はここから ▼▼▼ ***//
 
+	//*** bmp File Header のデータをファイルに書き込む
 	fwrite(&file_header.bfType, sizeof(file_header.bfType), 1, fp);
 	fwrite(&file_header.bfSize, sizeof(file_header.bfSize), 1, fp);
 	fwrite(&file_header.bfReserved1, sizeof(file_header.bfReserved1), 1, fp);
 	fwrite(&file_header.bfReserved2, sizeof(file_header.bfReserved2), 1, fp);
 	fwrite(&file_header.bfOffBits, sizeof(file_header.bfOffBits), 1, fp);
 
+	//*** bmp Information Header のデータをファイルに書き込む
 	fwrite(&info_header.biSize, sizeof(info_header.biSize), 1, fp);
 	fwrite(&info_header.biWidth, sizeof(info_header.biWidth), 1, fp);
 	fwrite(&info_header.biHeight, sizeof(info_header.biHeight), 1, fp);
@@ -359,27 +426,83 @@ int	main(void)
 	fwrite(&info_header.biClrUsed, sizeof(info_header.biClrUsed), 1, fp);
 	fwrite(&info_header.biClrImportant, sizeof(info_header.biClrImportant), 1, fp);
 
-	//* 画像データをファイルに書き込む
+	//*** 画像データをファイルに書き込む(データを書き込む順序は B, G, R の順なので注意)
 	for (j = 0; j < height; j++) {
 		for (i = 0; i < width; i++) {
-			fwrite(&b_img[i][j], 1, 1, fp); // B
-			fwrite(&g_img[i][j], 1, 1, fp); // G
-			fwrite(&r_img[i][j], 1, 1, fp); // R
+			fwrite(&b_img[i][j], 1, 1, fp); // B のデータの書き込み
+			fwrite(&g_img[i][j], 1, 1, fp); // G のデータの書き込み
+			fwrite(&r_img[i][j], 1, 1, fp); // R のデータの書き込み
+			}
 		}
-	}
-    
-	//* 以上データをファイルに書き込む処理 *//
 
-	//* 完了の表示
+	//*** ▲▲▲ データをファイルに書き込む処理はここまで ▲▲▲ ***//
+
+	//*** 完了メッセージ
 	printf("%s データ書き込み完了\n", file_name);
 
-	//* ファイルを閉じる
+	//*** ファイルを閉じる
 	fclose(fp);
+    return 0;
+}   //*** ファイルの書き込みここまで
+//*** ファイルの読み込みここから
+int ReadData(char file_name[80], int width, int height, BITMAPFILEHEADER file_header, BITMAPINFOHEADER info_header){
+    int i, j;
+    //*** ファイルを開く
+	fp = fopen(file_name, "rb");
+	if (fp != 0)
+		printf("%s OPEN!\n", file_name);
+	else {
+		printf("%s OPEN FAILED! ", file_name);
+		perror("error");
+        return -1;
+	}
 
-	//* 以上画像ファイルを作る処理 *//
+    //*** ▼▼▼ データをファイルに読み込む処理はここから ▼▼▼ ***//
 
-	return 0;
-}
+    //*** bmp File Header 読み出し
+    fread(&file_header.bfType, sizeof(file_header.bfType), 1, fp);
+    fread(&file_header.bfSize, sizeof(file_header.bfSize), 1, fp);
+    fread(&file_header.bfReserved1, sizeof(file_header.bfReserved1), 1, fp);
+    fread(&file_header.bfReserved2, sizeof(file_header.bfReserved2), 1, fp);
+    fread(&file_header.bfOffBits, sizeof(file_header.bfOffBits), 1, fp);
+
+    //*** bmp Information Header 読み出し
+    fread(&info_header.biSize, sizeof(info_header.biSize), 1, fp);
+    fread(&info_header.biWidth, sizeof(info_header.biWidth), 1, fp);
+    fread(&info_header.biHeight, sizeof(info_header.biHeight), 1, fp);
+    fread(&info_header.biPlanes, sizeof(info_header.biPlanes), 1, fp);
+    fread(&info_header.biBitCount, sizeof(info_header.biBitCount), 1, fp);
+    fread(&info_header.biCompression, sizeof(info_header.biCompression), 1, fp);
+    fread(&info_header.biSizeImage, sizeof(info_header.biSizeImage), 1, fp);
+    fread(&info_header.biXPixPerMeter, sizeof(info_header.biXPixPerMeter), 1, fp);
+    fread(&info_header.biYPixPerMeter, sizeof(info_header.biYPixPerMeter), 1, fp);
+    fread(&info_header.biClrUsed, sizeof(info_header.biClrUsed), 1, fp);
+    fread(&info_header.biClrImportant, sizeof(info_header.biClrImportant), 1, fp);
+
+    //*** 読み出した画像サイズを対応する変数に代入
+    width = info_header.biWidth; // 画像の幅(横の画素数)
+    height = info_header.biHeight; // 画像の高さ(縦の画素数)
+    int startWidth = (2048 - width) / 2;
+    int startHeight = (2048 - height) / 2;
+
+    //*** 画像データの読み出し ***//
+    // ２次元配列に画像データを入れる
+    for (j = startHeight; j < height + startHeight; j++) {
+        for (i = startWidth; i < width + startWidth; i++) {
+            fread(&b_img[i][j], 1, 1, fp);
+            fread(&g_img[i][j], 1, 1, fp);
+            fread(&r_img[i][j], 1, 1, fp);
+        }
+    }
+    //*** ▲▲▲ データをファイルに読み込む処理はここまで ▲▲▲ ***//
+
+    //*** ファイルを閉じる
+    fclose(fp);
+    //*** ファイル読み出し完了
+    printf("%s ファイル読み出し完了\n", file_name); 
+
+    return 0;
+}   //*** ファイルの読み込みここまで
 //*** 塗りつぶし長方形ここから
 void SolidFilledRectangle(DATA rectangle){
     int i, j, tmp;
